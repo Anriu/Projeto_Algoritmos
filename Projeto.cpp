@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <string.h>
+
 int contador = 0;
+char N[10][20]; //Nome dos pontos turisticos
+int C[10]; // Quantidade de pessoa por ponto
+int V[10]; // Visitas diarias
+int T[10]; // Visita totais, onde cada indece do vetor T[] é equivalente a um local turistico
+int resultado;
 
 int menu(){
 
@@ -30,56 +37,138 @@ void cadastrarPontoTuristico(char nome[][20], int quantidade[]){
     contador++; 
 }
 
-void registraVisita();
+void registraVisita(char nome[][20],int quantidade[],int visitas[], int visitastotal[]){
+    /*Ao registrar uma visita em um ponto turístico, o usuário deve
+    indicar o nome do ponto turístico e a quantidade de pessoas na visita.*/
+    char nomeEscolhido[20];
+    int pessoas;
+    
+    system("cls");
+    
+    printf("Locais disponivels:\n");
+    printf("%-25s | %-25s | %-25s |\n", "Nome Do local", "Quanditade maxima", "Quantidade Atual");
+    
+    for(int i = 0; i < contador; i ++){
+        printf("%-25s | %-25d | %-25d |\n", nome[i], quantidade[i], visitas[i]);
+    }
+    
+    printf("Informe em qual distino será a sua visita: ");
+    gets(nomeEscolhido);
+    printf("Invorme quantas pessoas irão para a visita: ");
+    scanf("%d", &pessoas);
 
-void iniciarVisita(){
+    for(int i = 0; i < contador; i ++){
+        if (strcmp(nome[i], nomeEscolhido) == 0) {
+            if(pessoas <= quantidade[i] && pessoas <= (quantidade[i] - visitas[i])){
+                
+                visitas[i] += pessoas;
+                visitastotal[i] += pessoas;
+
+            }else{
+                printf("GENTE DE MAIS\n");
+                system("pause");
+            }      
+        }
+    }
 
 }
 
-void relatorioDiariodeVisitas(){
+void iniciarVisita(int visitas_diarias[]){
+	//para zerar os valores do vetor V
+	for (int i = 0; i < contador; i++) {
+        visitas_diarias[i] = 0;
+    }
+    printf("Contador de visitas diarias zerado com sucesso. Inicie o registro de um novo dia!\n");
+    system("pause");
+}
+
+void relatorioDiariodeVisitas(char pontos[][20], int quantidade[], int visitasatuais[]){
+	system("cls");
+	
+    if (contador == 0) {
+        printf("nenhum ponto turístico cadastrado.\n");
+    } else{
+        printf("Relatorio diario de visitas-\n");
+        for(int i = 0; i < contador; i++){
+        printf("_________________________________________\n");
+		printf("Ponto turistico: %s\n", pontos[i]);
+		printf("Capacidade: %d\n", quantidade[i]);
+		printf("Visitates atuais: %d\n", visitasatuais[i]);
+        
+	    }
+    }
+	
+    system("pause");
+}
+
+void relatorioTotaldeVisitas(char pontos[][20], int quantidade[], int visitasatotais[]){
+    system("cls");
+    printf("TOTAL DE VISITAS\n");
+    if (contador == 0) {
+        printf("nenhum ponto turístico cadastrado.\n");
+    } else {
+        for (int i = 0; i < contador; i++) {
+        printf("_________________________________________\n");
+        printf("ponto turístico: %s\n", pontos[i]);
+        printf("Capacidade: %d\n", quantidade[i]);
+        printf("Visitates totais: %d\n", visitasatotais[i]);
+  
+        }  
+    } 
+    system("pause");
+}
+
+void escolha(int resultado){
+    switch (resultado){
+            case 1:
+                cadastrarPontoTuristico(N,C);
+                break;
+            case 2:
+                registraVisita(N,C,V,T);
+                break;
+            case 3:
+                iniciarVisita(V);
+                break;
+            case 4:
+                relatorioDiariodeVisitas(N,C,V);
+                break;
+            case 5:
+                relatorioTotaldeVisitas(N,C,T);
+                break;
+            
+            default:
+                system("cls");
+                printf("Valor invalido\n");
+                system("PAUSE");
+                system("cls");
+                break;
+        }
 
 }
 
-void relatorioTotaldeVisitas(){
-
+void inicial(){
+    for(int i = 0; i < 10; i++){
+        T[i] = 0;//Vetor T sempre começa com 0 todos os pontos;
+    }
+    for(int i = 0; i < 10; i++){
+        V[i] = 0;//Vetor V sempre começa com 0 todos os pontos;
+    }
 }
+
+
 
 int main(){
-    //Recebe o nome do ponto turistico
-    char N[10][20];
-    int C[10];
-    int resultado;
+
+    setlocale(LC_ALL, "Portuguese");
+    inicial();
 
     do{
         resultado = menu();
-        switch (resultado){
-        case 1:
-            cadastrarPontoTuristico(N,C);
-            break;
-        case 2:
-           
-            break;
-        case 3:
-
-            break;
-        case 4:
-        
-            break;
-        case 5:
-
-           break;
-        
-        default:
-            system("cls");
-            printf("Valor invalido\n");
-            system("PAUSE");
-            system("cls");
-            break;
-        }
+        escolha(resultado);
     } while (resultado != 6);
     
     system("CLS");
-    printf("Obrigado por utilizar nossos servicos");
+    printf("Obrigado por utilizar nossos servicos  ");
     
     return 0;
 }
