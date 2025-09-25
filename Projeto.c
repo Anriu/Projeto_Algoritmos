@@ -23,7 +23,6 @@ int T[10]; // Visita totais, onde cada indece do vetor T[] é equivalente a um l
 int resultado; //Variavel que recebe a escolha do menu; se resultado = 6 o programa se encerra
 
 
-
 //Menu de opções, foi desenhando usando os carateres ┌ ─ ┐ ├ │ ┘ └
 int menu(){
     int restultado;
@@ -225,7 +224,7 @@ int main(){
             default:
                 system("cls");
                 if(resultado != 6){
-                    printf("Valor invalido\n");
+                    printf("Valor invalido\nPrecione o enter para retornar ao menu\n");
                     system("PAUSE");
                 }
                 system("cls");
